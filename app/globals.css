@@ -1,6 +1,9 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
+
+@theme {
+  --color-gold: #ff2d55;
+  --color-gold-bright: #ff5a7a;
+}
 
 * {
   margin: 0;
