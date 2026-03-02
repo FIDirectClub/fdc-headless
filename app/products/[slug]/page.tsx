@@ -36,7 +36,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
     <>
       <Navigation />
       
-      <main className="pt-36 bg-white min-h-screen">
+      <main className="pt-40 bg-white min-h-screen">
         {/* Breadcrumbs */}
         <div className="bg-gray-100 py-3 border-b border-gray-200">
           <div className="max-w-7xl mx-auto px-6 md:px-12">
