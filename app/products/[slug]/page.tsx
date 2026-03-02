@@ -1,7 +1,6 @@
 import Navigation from "@/components/Navigation";
 import Link from "next/link";
-import Image from "next/image";
-import { getProduct, getProducts } from "@/lib/woocommerce";
+import { getProductBySlug, getProducts } from "@/lib/woocommerce";
 import { notFound } from "next/navigation";
 
 export async function generateStaticParams() {
@@ -12,8 +11,8 @@ export async function generateStaticParams() {
 }
 
 export default async function ProductPage({ params }: { params: { slug: string } }) {
-  const products = await getProducts({ per_page: 1 });
-  const product = products[0];
+  // Fetch the actual product by slug
+  const product = await getProductBySlug(params.slug);
 
   if (!product) {
     notFound();

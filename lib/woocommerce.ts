@@ -85,6 +85,17 @@ export async function getProduct(id: number) {
   }
 }
 
+export async function getProductBySlug(slug: string): Promise<WooProduct | null> {
+  try {
+    const response = await woocommerce.get("products", { slug });
+    const products = response.data as WooProduct[];
+    return products.length > 0 ? products[0] : null;
+  } catch (error) {
+    console.error(`Error fetching product by slug ${slug}:`, error);
+    return null;
+  }
+}
+
 export async function getCategories(params = {}) {
   try {
     const response = await woocommerce.get("products/categories", params);
