@@ -54,7 +54,7 @@ export default async function Home() {
         </section>
 
         {/* Category Navigation Bar - STICKY */}
-        <section className="bg-slate-800 py-4 sticky top-[104px] z-40 shadow-lg border-b-2 border-slate-700">
+        <section className="bg-slate-800 py-4 sticky top-[76px] z-40 shadow-lg border-b-2 border-slate-700">
           <div className="max-w-7xl mx-auto px-6 md:px-12">
             <div className="flex items-center justify-between overflow-x-auto gap-4 scrollbar-hide">
               <Link href="/products" className="text-white hover:text-yellow-400 font-bold uppercase text-sm whitespace-nowrap transition-colors px-3 py-2">
