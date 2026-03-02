@@ -1,5 +1,6 @@
 import Navigation from "@/components/Navigation";
 import Link from "next/link";
+import Image from "next/image";
 
 export default async function Home() {
   return (
@@ -9,7 +10,7 @@ export default async function Home() {
       <main className="pt-20 bg-white">
         {/* Hero Banner - Large lifestyle image with CTA */}
         <section className="relative h-[600px] bg-gradient-to-br from-slate-700 via-slate-600 to-slate-500 overflow-hidden">
-          {/* Placeholder for hero image - will add real image later */}
+          {/* Placeholder for hero image */}
           <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1595590424283-b8f17842773f?w=1920')] bg-cover bg-center opacity-40"></div>
           
           <div className="relative h-full max-w-7xl mx-auto px-6 md:px-12 flex items-center">
@@ -44,8 +45,205 @@ export default async function Home() {
           </div>
         </section>
 
-        {/* Promotional Grid - PSA Style */}
+        {/* Category Navigation Bar - STICKY */}
+        <section className="bg-slate-800 py-4 sticky top-[104px] z-40 shadow-lg border-b-2 border-slate-700">
+          <div className="max-w-7xl mx-auto px-6 md:px-12">
+            <div className="flex items-center justify-between overflow-x-auto gap-4 scrollbar-hide">
+              <Link href="/products" className="text-white hover:text-yellow-400 font-bold uppercase text-sm whitespace-nowrap transition-colors px-3 py-2">
+                Shop All
+              </Link>
+              <Link href="/products?category=pistols" className="text-white hover:text-yellow-400 font-bold uppercase text-sm whitespace-nowrap transition-colors px-3 py-2">
+                Pistols
+              </Link>
+              <Link href="/products?category=rifles" className="text-white hover:text-yellow-400 font-bold uppercase text-sm whitespace-nowrap transition-colors px-3 py-2">
+                Rifles
+              </Link>
+              <Link href="/products?category=shotguns" className="text-white hover:text-yellow-400 font-bold uppercase text-sm whitespace-nowrap transition-colors px-3 py-2">
+                Shotguns
+              </Link>
+              <Link href="/products?category=ar-15" className="text-white hover:text-yellow-400 font-bold uppercase text-sm whitespace-nowrap transition-colors px-3 py-2">
+                AR-15
+              </Link>
+              <Link href="/products?category=ak-47" className="text-white hover:text-yellow-400 font-bold uppercase text-sm whitespace-nowrap transition-colors px-3 py-2">
+                AK-47
+              </Link>
+              <Link href="/products?category=ammunition" className="text-white hover:text-yellow-400 font-bold uppercase text-sm whitespace-nowrap transition-colors px-3 py-2">
+                Ammo
+              </Link>
+              <Link href="/products?category=suppressors" className="text-white hover:text-yellow-400 font-bold uppercase text-sm whitespace-nowrap transition-colors px-3 py-2">
+                Suppressors
+              </Link>
+              <Link href="/brands" className="text-white hover:text-yellow-400 font-bold uppercase text-sm whitespace-nowrap transition-colors px-3 py-2">
+                Brands
+              </Link>
+              <Link href="/deals" className="bg-red-600 text-white hover:bg-red-700 font-bold uppercase text-sm whitespace-nowrap px-4 py-2 rounded transition-colors">
+                Daily Deals
+              </Link>
+            </div>
+          </div>
+        </section>
+
+        {/* Category Grid with Images */}
         <section className="py-12 bg-gray-50">
+          <div className="max-w-7xl mx-auto px-6 md:px-12">
+            <h2 className="text-2xl font-black text-slate-900 uppercase mb-6 tracking-tight">Shop by Category</h2>
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+              {[
+                { name: 'Ammo', img: 'https://images.unsplash.com/photo-1595590424283-b8f17842773f?w=400&h=400&fit=crop', slug: 'ammunition' },
+                { name: 'Trending Now', img: 'https://images.unsplash.com/photo-1595590424283-b8f17842773f?w=400&h=400&fit=crop', slug: 'trending' },
+                { name: 'Build Kits', img: 'https://images.unsplash.com/photo-1595590424283-b8f17842773f?w=400&h=400&fit=crop', slug: 'build-kits' },
+                { name: 'Pistols', img: 'https://images.unsplash.com/photo-1595590424283-b8f17842773f?w=400&h=400&fit=crop', slug: 'pistols' },
+                { name: 'Rifles', img: 'https://images.unsplash.com/photo-1595590424283-b8f17842773f?w=400&h=400&fit=crop', slug: 'rifles' },
+                { name: 'Shotguns', img: 'https://images.unsplash.com/photo-1595590424283-b8f17842773f?w=400&h=400&fit=crop', slug: 'shotguns' },
+                { name: 'Optics', img: 'https://images.unsplash.com/photo-1595590424283-b8f17842773f?w=400&h=400&fit=crop', slug: 'optics' },
+                { name: 'Suppressors', img: 'https://images.unsplash.com/photo-1595590424283-b8f17842773f?w=400&h=400&fit=crop', slug: 'suppressors' },
+              ].map((cat) => (
+                <Link
+                  key={cat.slug}
+                  href={`/products?category=${cat.slug}`}
+                  className="group relative h-40 rounded-lg overflow-hidden shadow-md hover:shadow-xl transition-all"
+                >
+                  <div className="absolute inset-0 bg-slate-900">
+                    <Image
+                      src={cat.img}
+                      alt={cat.name}
+                      fill
+                      className="object-cover opacity-60 group-hover:opacity-80 transition-opacity"
+                    />
+                  </div>
+                  <div className="relative h-full flex items-end p-4">
+                    <h3 className="text-white font-black text-xl uppercase drop-shadow-lg">
+                      {cat.name}
+                    </h3>
+                  </div>
+                </Link>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* Featured Products with Badges */}
+        <section className="py-12 bg-white">
+          <div className="max-w-7xl mx-auto px-6 md:px-12">
+            <h2 className="text-3xl font-black text-slate-900 uppercase mb-8 tracking-tight">
+              Featured Products
+            </h2>
+            
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+              {/* Sample products with full badge system */}
+              {[
+                { title: 'PSA AR-15 Rifle Kit 5.56 16" Nitride 1:7 Mid-Length 13.5" M-Lok MOE w/ MBUS', brand: 'PSA', price: '449.99', msrp: '649.99', badges: ['daily-deal', 'free-ship'], sku: '516446780' },
+                { title: 'Springfield Armory XD-M Elite 9mm 4.5" OSP Optics Ready 19+1', brand: 'Springfield', price: '549.99', msrp: '699.99', badges: ['clearance'], sku: 'XDMED9459' },
+                { title: 'Glock 19 Gen5 9mm 4.02" Fixed Sights 15rd Black', brand: 'Glock', price: '499.99', msrp: '599.99', badges: ['daily-deal'], sku: 'G19G5' },
+                { title: 'Sig Sauer P320 Compact 9mm 3.9" X-Ray Sights 15rd Black', brand: 'Sig Sauer', price: '529.99', msrp: '679.99', badges: ['free-ship'], sku: '320C-9-B' },
+                { title: 'Smith & Wesson M&P 15 Sport III 5.56 16" M-LOK 30rd Black', brand: 'S&W', price: '699.99', msrp: '899.99', badges: ['daily-deal', 'free-ship'], sku: '12936' },
+                { title: 'Mossberg 590 Shockwave 12ga 14" Raptor Grip 6rd Black', brand: 'Mossberg', price: '399.99', msrp: '549.99', badges: ['clearance'], sku: '50659' },
+                { title: 'PSAK-47 GF3 Forged Classic Polymer Rifle 7.62x39 16.5" 30rd', brand: 'PSA', price: '649.99', msrp: '899.99', badges: ['daily-deal'], sku: '51655115846' },
+                { title: 'Vortex Optics Crossfire Red Dot 2 MOA with Riser Mount', brand: 'Vortex', price: '129.99', msrp: '189.99', badges: ['free-ship'], sku: 'CF-RD2' },
+              ].map((product, i) => (
+                <Link
+                  key={i}
+                  href={`/products/${product.sku.toLowerCase()}`}
+                  className="group bg-white border-2 border-gray-200 hover:border-slate-800 rounded-lg overflow-hidden transition-all"
+                >
+                  {/* Product Image */}
+                  <div className="relative aspect-square bg-gray-100 overflow-hidden">
+                    <div className="absolute inset-0 bg-gray-200 group-hover:bg-gray-300 transition-colors"></div>
+                    
+                    {/* Multi-Badge System */}
+                    <div className="absolute top-2 left-2 right-2 flex flex-wrap gap-1">
+                      {product.badges.includes('daily-deal') && (
+                        <span className="px-2 py-1 bg-slate-800 text-white text-xs font-bold uppercase rounded shadow-sm">
+                          Daily Deal
+                        </span>
+                      )}
+                      {product.badges.includes('free-ship') && (
+                        <span className="px-2 py-1 bg-blue-600 text-white text-xs font-bold uppercase rounded shadow-sm">
+                          Free Ship
+                        </span>
+                      )}
+                      {product.badges.includes('clearance') && (
+                        <span className="px-2 py-1 bg-green-600 text-white text-xs font-bold uppercase rounded shadow-sm">
+                          Clearance
+                        </span>
+                      )}
+                    </div>
+                  </div>
+                  
+                  {/* Product Info */}
+                  <div className="p-3">
+                    <div className="text-xs text-gray-500 uppercase font-bold mb-1">
+                      {product.brand}
+                    </div>
+                    <h3 className="text-sm font-bold text-slate-900 mb-2 line-clamp-2 leading-tight">
+                      {product.title}
+                    </h3>
+                    
+                    <div className="mb-2">
+                      <div className="flex items-baseline gap-2">
+                        <span className="text-xl font-black text-red-600">${product.price}</span>
+                        <span className="text-xs text-gray-400 line-through">${product.msrp}</span>
+                      </div>
+                      <div className="text-xs text-gray-500 mt-1">
+                        SKU: {product.sku}
+                      </div>
+                    </div>
+                    
+                    <div className="text-xs text-emerald-600 font-bold">
+                      ✓ In Stock
+                    </div>
+                  </div>
+                </Link>
+              ))}
+            </div>
+
+            <div className="text-center mt-8">
+              <Link
+                href="/products"
+                className="inline-block px-8 py-3 bg-slate-800 text-white font-bold uppercase tracking-wide rounded-lg hover:bg-slate-700 transition-all"
+              >
+                View All Products
+              </Link>
+            </div>
+          </div>
+        </section>
+
+        {/* Trending Now Section */}
+        <section className="py-12 bg-gray-50 border-t-2 border-gray-200">
+          <div className="max-w-7xl mx-auto px-6 md:px-12">
+            <div className="flex items-center gap-3 mb-8">
+              <span className="text-4xl">🔥</span>
+              <h2 className="text-3xl font-black text-slate-900 uppercase tracking-tight">
+                Trending Now
+              </h2>
+            </div>
+            
+            <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
+              {[
+                'AR-15 Build Kits',
+                '9mm Ammo',
+                'Red Dot Sights',
+                'AK-47 Mags',
+                'Pistol Holsters',
+                'Suppressors',
+              ].map((item) => (
+                <Link
+                  key={item}
+                  href={`/products?search=${encodeURIComponent(item)}`}
+                  className="bg-white border-2 border-gray-200 hover:border-yellow-400 hover:shadow-lg rounded-lg p-4 text-center transition-all group"
+                >
+                  <div className="text-2xl mb-2">⚡</div>
+                  <span className="font-bold text-sm text-gray-700 group-hover:text-slate-900">
+                    {item}
+                  </span>
+                </Link>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* Promotional Grid */}
+        <section className="py-12 bg-white">
           <div className="max-w-7xl mx-auto px-6 md:px-12">
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {/* Large Feature - Suppressors */}
@@ -103,102 +301,6 @@ export default async function Home() {
                     See All Deals →
                   </span>
                 </div>
-              </Link>
-            </div>
-          </div>
-        </section>
-
-        {/* Category Navigation Bar */}
-        <section className="bg-slate-800 py-4 sticky top-20 z-40 shadow-lg">
-          <div className="max-w-7xl mx-auto px-6 md:px-12">
-            <div className="flex items-center justify-between overflow-x-auto gap-4">
-              <Link href="/products" className="text-white hover:text-yellow-400 font-bold uppercase text-sm whitespace-nowrap transition-colors">
-                Shop All
-              </Link>
-              <Link href="/products?category=pistols" className="text-white hover:text-yellow-400 font-bold uppercase text-sm whitespace-nowrap transition-colors">
-                Pistols
-              </Link>
-              <Link href="/products?category=rifles" className="text-white hover:text-yellow-400 font-bold uppercase text-sm whitespace-nowrap transition-colors">
-                Rifles
-              </Link>
-              <Link href="/products?category=shotguns" className="text-white hover:text-yellow-400 font-bold uppercase text-sm whitespace-nowrap transition-colors">
-                Shotguns
-              </Link>
-              <Link href="/products?category=ar-15" className="text-white hover:text-yellow-400 font-bold uppercase text-sm whitespace-nowrap transition-colors">
-                AR-15
-              </Link>
-              <Link href="/products?category=ak-47" className="text-white hover:text-yellow-400 font-bold uppercase text-sm whitespace-nowrap transition-colors">
-                AK-47
-              </Link>
-              <Link href="/products?category=ammunition" className="text-white hover:text-yellow-400 font-bold uppercase text-sm whitespace-nowrap transition-colors">
-                Ammo
-              </Link>
-              <Link href="/products?category=suppressors" className="text-white hover:text-yellow-400 font-bold uppercase text-sm whitespace-nowrap transition-colors">
-                Suppressors
-              </Link>
-              <Link href="/brands" className="text-white hover:text-yellow-400 font-bold uppercase text-sm whitespace-nowrap transition-colors">
-                Brands
-              </Link>
-              <Link href="/deals" className="bg-red-600 text-white hover:bg-red-700 font-bold uppercase text-sm whitespace-nowrap px-4 py-2 rounded transition-colors">
-                Daily Deals
-              </Link>
-            </div>
-          </div>
-        </section>
-
-        {/* Featured Products Section */}
-        <section className="py-12 bg-white">
-          <div className="max-w-7xl mx-auto px-6 md:px-12">
-            <h2 className="text-3xl font-black text-slate-900 uppercase mb-8 tracking-tight">
-              Featured Products
-            </h2>
-            
-            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-              {/* Sample product cards - will be replaced with real data */}
-              {[1, 2, 3, 4, 5, 6, 7, 8].map((i) => (
-                <Link
-                  key={i}
-                  href="/products/sample"
-                  className="group bg-white border-2 border-gray-200 hover:border-slate-800 rounded-lg overflow-hidden transition-all"
-                >
-                  {/* Product Image */}
-                  <div className="relative aspect-square bg-gray-100 overflow-hidden">
-                    <div className="absolute inset-0 bg-gray-200 group-hover:bg-gray-300 transition-colors"></div>
-                    <div className="absolute top-2 right-2">
-                      <span className="px-2 py-1 bg-red-600 text-white text-xs font-bold uppercase rounded">
-                        Sale
-                      </span>
-                    </div>
-                  </div>
-                  
-                  {/* Product Info */}
-                  <div className="p-3">
-                    <div className="text-xs text-gray-500 uppercase font-bold mb-1">
-                      Springfield Armory
-                    </div>
-                    <h3 className="text-sm font-bold text-slate-900 mb-2 line-clamp-2">
-                      ECHELON 9mm 4.5" 17+1 Pistol
-                    </h3>
-                    
-                    <div className="flex items-baseline gap-2 mb-2">
-                      <span className="text-xl font-black text-red-600">$XXX.XX</span>
-                      <span className="text-xs text-gray-400 line-through">$XXX.XX</span>
-                    </div>
-                    
-                    <div className="text-xs text-emerald-600 font-bold">
-                      ✓ In Stock
-                    </div>
-                  </div>
-                </Link>
-              ))}
-            </div>
-
-            <div className="text-center mt-8">
-              <Link
-                href="/products"
-                className="inline-block px-8 py-3 bg-slate-800 text-white font-bold uppercase tracking-wide rounded-lg hover:bg-slate-700 transition-all"
-              >
-                View All Products
               </Link>
             </div>
           </div>
