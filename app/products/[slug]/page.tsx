@@ -36,7 +36,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
     <>
       <Navigation />
       
-      <main className="pt-20 bg-white min-h-screen">
+      <main className="pt-28 bg-white min-h-screen">
         {/* Breadcrumbs */}
         <div className="bg-gray-100 py-3 border-b border-gray-200">
           <div className="max-w-7xl mx-auto px-6 md:px-12">
@@ -83,7 +83,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
                   <img
                     src={product.images[0].src}
                     alt={product.images[0].alt || product.name}
-                    className="w-full h-full object-contain p-8"
+                    className="w-full h-full object-contain p-2"
                   />
                 ) : (
                   <div className="absolute inset-0 flex items-center justify-center text-gray-400 text-lg">
