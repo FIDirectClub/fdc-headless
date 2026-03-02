@@ -12,8 +12,6 @@ export async function generateStaticParams() {
 }
 
 export default async function ProductPage({ params }: { params: { slug: string } }) {
-  // In real implementation, we'd fetch by slug
-  // For now, fetch a sample product
   const products = await getProducts({ per_page: 1 });
   const product = products[0];
 
@@ -31,157 +29,156 @@ export default async function ProductPage({ params }: { params: { slug: string }
     <>
       <Navigation />
       
-      <main className="pt-20 bg-white">
+      <main className="pt-20 bg-white min-h-screen">
         {/* Breadcrumbs */}
         <div className="bg-gray-100 py-3 border-b border-gray-200">
           <div className="max-w-7xl mx-auto px-6 md:px-12">
             <div className="flex items-center gap-2 text-sm text-gray-600">
-              <Link href="/" className="hover:text-slate-900">Home</Link>
-              <span>/</span>
-              <Link href="/products" className="hover:text-slate-900">Products</Link>
+              <Link href="/" className="hover:text-blue-600 font-semibold uppercase">Home</Link>
               <span>/</span>
               {product.categories && product.categories[0] && (
                 <>
-                  <Link href={`/products?category=${product.categories[0].slug}`} className="hover:text-slate-900">
+                  <Link href={`/products?category=${product.categories[0].slug}`} className="hover:text-blue-600 uppercase">
                     {product.categories[0].name}
                   </Link>
-                  <span>/</span>
                 </>
               )}
-              <span className="text-slate-900 font-semibold">{product.name}</span>
             </div>
           </div>
         </div>
 
         <div className="max-w-7xl mx-auto px-6 md:px-12 py-8">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-            {/* Left Column - Images */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
+            {/* LEFT COLUMN - Product Images */}
             <div>
               {/* Stock Status Badge */}
               <div className="mb-4">
                 {product.stock_status === 'instock' && (
-                  <span className="inline-block px-4 py-2 bg-emerald-100 text-emerald-700 font-bold text-sm rounded">
-                    ✓ In stock online
-                  </span>
+                  <div className="inline-flex items-center gap-2 px-4 py-2 bg-blue-600 text-white font-bold text-sm rounded uppercase">
+                    In stock online
+                  </div>
                 )}
                 {product.stock_status === 'outofstock' && (
-                  <span className="inline-block px-4 py-2 bg-red-100 text-red-700 font-bold text-sm rounded">
+                  <div className="inline-flex items-center gap-2 px-4 py-2 bg-gray-400 text-white font-bold text-sm rounded uppercase">
                     Out of stock
-                  </span>
+                  </div>
                 )}
                 {product.stock_status === 'onbackorder' && (
-                  <span className="inline-block px-4 py-2 bg-yellow-100 text-yellow-700 font-bold text-sm rounded">
+                  <div className="inline-flex items-center gap-2 px-4 py-2 bg-yellow-500 text-white font-bold text-sm rounded uppercase">
                     Available on backorder
-                  </span>
+                  </div>
                 )}
               </div>
 
               {/* Main Product Image */}
-              <div className="relative aspect-square bg-gray-100 rounded-lg overflow-hidden mb-4">
+              <div className="relative aspect-square bg-white border-2 border-gray-200 rounded-lg overflow-hidden mb-4">
                 {product.images && product.images[0] ? (
-                  <Image
+                  <img
                     src={product.images[0].src}
                     alt={product.images[0].alt || product.name}
-                    fill
-                    className="object-contain p-4"
-                    priority
+                    className="w-full h-full object-contain p-8"
                   />
                 ) : (
-                  <div className="absolute inset-0 flex items-center justify-center text-gray-400">
+                  <div className="absolute inset-0 flex items-center justify-center text-gray-400 text-lg">
                     No image available
                   </div>
                 )}
               </div>
 
-              {/* Image Gallery */}
+              {/* Image Gallery Thumbnails */}
               {product.images && product.images.length > 1 && (
-                <div className="grid grid-cols-4 gap-2">
-                  {product.images.slice(0, 8).map((image, index) => (
+                <div className="grid grid-cols-6 gap-2">
+                  {product.images.slice(0, 6).map((image, index) => (
                     <button
                       key={index}
-                      className="relative aspect-square bg-gray-100 rounded-lg overflow-hidden border-2 border-gray-200 hover:border-slate-800 transition-colors"
+                      className="relative aspect-square bg-white border-2 border-gray-200 hover:border-blue-600 rounded-lg overflow-hidden transition-colors"
                     >
-                      <Image
+                      <img
                         src={image.src}
                         alt={image.alt || `${product.name} - Image ${index + 1}`}
-                        fill
-                        className="object-contain p-2"
+                        className="w-full h-full object-contain p-2"
                       />
                     </button>
                   ))}
                 </div>
               )}
+
+              {/* Report incorrect images link */}
+              <div className="mt-4 text-center">
+                <button className="text-sm text-blue-600 hover:underline">
+                  📷 Report incorrect images
+                </button>
+              </div>
             </div>
 
-            {/* Right Column - Product Info */}
+            {/* RIGHT COLUMN - Product Info */}
             <div>
-              {/* Title */}
-              <h1 className="text-3xl font-black text-slate-900 mb-4">
+              {/* Product Title */}
+              <h1 className="text-3xl md:text-4xl font-black text-slate-900 mb-6 leading-tight">
                 {product.name}
               </h1>
 
-              {/* Badges */}
-              <div className="flex flex-wrap gap-2 mb-6">
-                {onSale && (
-                  <span className="px-3 py-1 bg-slate-800 text-white text-sm font-bold uppercase rounded">
-                    Daily Deal
-                  </span>
-                )}
-                {onSale && savingsPercent >= 20 && (
-                  <span className="px-3 py-1 bg-green-600 text-white text-sm font-bold uppercase rounded">
-                    Clearance
-                  </span>
-                )}
-              </div>
-
-              {/* Price */}
-              <div className="mb-6 pb-6 border-b border-gray-200">
+              {/* Price Section */}
+              <div className="mb-6">
                 {onSale ? (
-                  <div>
-                    <div className="flex items-baseline gap-3 mb-2">
-                      <span className="text-gray-500 text-lg">Regular Price</span>
+                  <div className="space-y-2">
+                    <div className="flex items-baseline gap-3">
+                      <span className="text-gray-600 text-sm font-bold">Regular Price</span>
                       <span className="text-gray-500 text-xl line-through">
                         ${regularPrice.toFixed(2)}
                       </span>
                     </div>
                     <div className="flex items-baseline gap-3">
-                      <span className="text-gray-700 text-lg font-bold">Special Price</span>
-                      <span className="text-4xl font-black text-red-600">
+                      <span className="text-gray-900 text-sm font-bold">Special Price</span>
+                      <span className="text-5xl font-black text-slate-900">
                         ${salePrice.toFixed(2)}
                       </span>
                     </div>
-                    <div className="mt-2 text-emerald-600 font-bold">
-                      Save ${savings.toFixed(2)} ({savingsPercent}%)
-                    </div>
                   </div>
                 ) : (
-                  <div className="text-4xl font-black text-slate-900">
+                  <div className="text-5xl font-black text-slate-900">
                     ${salePrice.toFixed(2)}
                   </div>
                 )}
               </div>
 
+              {/* Badges */}
+              {(onSale || savingsPercent >= 20) && (
+                <div className="flex flex-wrap gap-2 mb-6">
+                  {onSale && (
+                    <div className="px-4 py-2 bg-slate-800 text-white text-sm font-bold uppercase rounded flex items-center gap-2">
+                      🔥 Daily Deal
+                    </div>
+                  )}
+                  {savingsPercent >= 20 && (
+                    <div className="px-4 py-2 bg-green-600 text-white text-sm font-bold uppercase rounded flex items-center gap-2">
+                      💰 Clearance
+                    </div>
+                  )}
+                </div>
+              )}
+
               {/* Product Details Table */}
-              <div className="mb-6 bg-gray-50 rounded-lg p-4">
-                <table className="w-full text-sm">
-                  <tbody>
+              <div className="border-2 border-gray-200 rounded-lg overflow-hidden mb-6">
+                <table className="w-full">
+                  <tbody className="divide-y divide-gray-200">
                     {product.sku && (
-                      <tr className="border-b border-gray-200">
-                        <td className="py-2 font-bold text-gray-700">SKU</td>
-                        <td className="py-2 text-gray-900">{product.sku}</td>
+                      <tr>
+                        <td className="px-4 py-3 bg-gray-50 font-bold text-sm text-gray-700 w-32">SKU</td>
+                        <td className="px-4 py-3 text-sm text-gray-900">{product.sku}</td>
                       </tr>
                     )}
                     {product.categories && product.categories[0] && (
-                      <tr className="border-b border-gray-200">
-                        <td className="py-2 font-bold text-gray-700">Category</td>
-                        <td className="py-2 text-gray-900">{product.categories[0].name}</td>
+                      <tr>
+                        <td className="px-4 py-3 bg-gray-50 font-bold text-sm text-gray-700">Category</td>
+                        <td className="px-4 py-3 text-sm text-gray-900">{product.categories[0].name}</td>
                       </tr>
                     )}
                     {product.attributes && product.attributes.length > 0 && (
-                      product.attributes.map((attr, index) => (
-                        <tr key={index} className="border-b border-gray-200">
-                          <td className="py-2 font-bold text-gray-700">{attr.name}</td>
-                          <td className="py-2 text-gray-900">{attr.options.join(', ')}</td>
+                      product.attributes.slice(0, 3).map((attr, index) => (
+                        <tr key={index}>
+                          <td className="px-4 py-3 bg-gray-50 font-bold text-sm text-gray-700">{attr.name}</td>
+                          <td className="px-4 py-3 text-sm text-gray-900">{attr.options.join(', ')}</td>
                         </tr>
                       ))
                     )}
@@ -189,20 +186,20 @@ export default async function ProductPage({ params }: { params: { slug: string }
                 </table>
               </div>
 
-              {/* Add to Cart Section */}
+              {/* Quantity and Add to Cart */}
               <div className="mb-6">
                 <div className="flex items-center gap-4 mb-4">
-                  <label className="font-bold text-gray-700">Qty</label>
+                  <label className="font-bold text-sm text-gray-700">Qty</label>
                   <input
                     type="number"
                     min="1"
                     defaultValue="1"
-                    className="w-20 px-3 py-2 border-2 border-gray-300 rounded-lg focus:border-blue-500 focus:outline-none"
+                    className="w-24 px-3 py-2 text-center border-2 border-gray-300 rounded focus:border-blue-600 focus:outline-none"
                   />
                 </div>
                 
                 {product.stock_status === 'instock' ? (
-                  <button className="w-full px-8 py-4 bg-blue-600 hover:bg-blue-700 text-white font-bold uppercase tracking-wide rounded-lg transition-all shadow-lg text-lg">
+                  <button className="w-full px-8 py-4 bg-red-600 hover:bg-red-700 text-white font-bold uppercase tracking-wide rounded-lg transition-all text-lg">
                     Add to Cart
                   </button>
                 ) : (
@@ -212,87 +209,85 @@ export default async function ProductPage({ params }: { params: { slug: string }
                 )}
               </div>
 
-              {/* Compliance Warning */}
-              <div className="bg-yellow-50 border-2 border-yellow-400 rounded-lg p-4 mb-6">
-                <p className="text-sm text-yellow-800 font-semibold mb-2">
-                  ⚠️ FFL Compliance Required
-                </p>
-                <p className="text-xs text-yellow-700">
-                  This firearm must be shipped to a valid FFL dealer. You will be able to select your FFL during checkout.
-                </p>
+              {/* Wish List and Share */}
+              <div className="flex gap-4 mb-6">
+                <button className="flex-1 px-6 py-3 border-2 border-gray-300 hover:border-blue-600 text-blue-600 font-bold text-sm rounded-lg transition-all flex items-center justify-center gap-2">
+                  ❤️ Add to Wish List
+                </button>
+                <button className="flex-1 px-6 py-3 border-2 border-gray-300 hover:border-blue-600 text-gray-700 font-bold text-sm rounded-lg transition-all flex items-center justify-center gap-2">
+                  Share:  ✉️  📘
+                </button>
               </div>
 
-              {/* Additional Actions */}
-              <div className="flex gap-4">
-                <button className="flex-1 px-6 py-3 border-2 border-gray-300 hover:border-slate-800 text-slate-900 font-bold uppercase rounded-lg transition-all text-sm">
-                  Add to Wish List
-                </button>
-                <button className="flex-1 px-6 py-3 border-2 border-gray-300 hover:border-slate-800 text-slate-900 font-bold uppercase rounded-lg transition-all text-sm">
-                  Share
-                </button>
+              {/* FFL Compliance Warning */}
+              <div className="bg-yellow-50 border-2 border-yellow-400 rounded-lg p-4">
+                <p className="text-sm font-bold text-yellow-900 mb-2">
+                  ⚠️ FFL Compliance Required
+                </p>
+                <p className="text-sm text-yellow-800">
+                  This firearm must be shipped to a valid FFL dealer. You will be able to select your FFL during checkout.
+                </p>
               </div>
             </div>
           </div>
 
           {/* Tabs Section */}
-          <div className="mt-12 border-t-2 border-gray-200 pt-8">
-            <div className="flex gap-4 mb-6 border-b-2 border-gray-200">
-              <button className="px-6 py-3 font-bold uppercase text-sm border-b-4 border-blue-600 text-blue-600">
+          <div className="mt-12 border-t-2 border-gray-200">
+            <div className="flex gap-0 border-b-2 border-gray-200">
+              <button className="px-8 py-4 font-bold uppercase text-sm border-b-4 border-blue-600 text-blue-600 -mb-0.5">
                 Product Details
               </button>
-              <button className="px-6 py-3 font-bold uppercase text-sm text-gray-600 hover:text-slate-900">
+              <button className="px-8 py-4 font-bold uppercase text-sm text-gray-600 hover:text-slate-900">
                 Reviews
               </button>
-              <button className="px-6 py-3 font-bold uppercase text-sm text-gray-600 hover:text-slate-900">
+              <button className="px-8 py-4 font-bold uppercase text-sm text-gray-600 hover:text-slate-900">
                 Q & A
+              </button>
+              <button className="px-8 py-4 font-bold uppercase text-sm text-gray-600 hover:text-slate-900">
+                Retail Stock
+              </button>
+              <button className="px-8 py-4 font-bold uppercase text-sm text-gray-600 hover:text-slate-900">
+                Compliance
               </button>
             </div>
 
-            {/* Product Details Tab */}
-            <div className="prose max-w-none">
-              <h2 className="text-2xl font-black text-slate-900 uppercase mb-4">Details</h2>
+            {/* Product Details Tab Content */}
+            <div className="py-8">
+              <h2 className="text-2xl font-black text-slate-900 uppercase mb-6">Product Details</h2>
               
-              {product.description && (
-                <div 
-                  className="text-gray-700 leading-relaxed"
-                  dangerouslySetInnerHTML={{ __html: product.description }}
-                />
-              )}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                {/* Details Section */}
+                <div>
+                  <h3 className="text-xl font-black text-slate-900 uppercase mb-4">Details:</h3>
+                  {product.short_description && (
+                    <div 
+                      className="text-gray-700 leading-relaxed prose prose-sm max-w-none mb-6"
+                      dangerouslySetInnerHTML={{ __html: product.short_description }}
+                    />
+                  )}
 
-              {product.short_description && (
-                <div 
-                  className="mt-4 text-gray-700"
-                  dangerouslySetInnerHTML={{ __html: product.short_description }}
-                />
-              )}
-
-              {product.attributes && product.attributes.length > 0 && (
-                <div className="mt-6">
-                  <h3 className="text-xl font-bold text-slate-900 mb-3">Specifications</h3>
-                  <table className="w-full border-collapse">
-                    <tbody>
+                  {product.attributes && product.attributes.length > 0 && (
+                    <div className="space-y-2 text-sm">
                       {product.attributes.map((attr, index) => (
-                        <tr key={index} className="border-b border-gray-200">
-                          <td className="py-3 font-bold text-gray-700 w-1/3">{attr.name}</td>
-                          <td className="py-3 text-gray-900">{attr.options.join(', ')}</td>
-                        </tr>
+                        <div key={index}>
+                          <span className="font-bold text-gray-900">{attr.name}:</span>{' '}
+                          <span className="text-gray-700">{attr.options.join(', ')}</span>
+                        </div>
                       ))}
-                    </tbody>
-                  </table>
+                    </div>
+                  )}
                 </div>
-              )}
-            </div>
-          </div>
 
-          {/* Related Products */}
-          <div className="mt-16 border-t-2 border-gray-200 pt-12">
-            <h2 className="text-3xl font-black text-slate-900 uppercase mb-8">
-              You May Also Like
-            </h2>
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-              {/* Placeholder for related products - will be populated later */}
-              <div className="text-center text-gray-500 py-8 col-span-full">
-                Related products will appear here
+                {/* Features Section */}
+                <div>
+                  <h3 className="text-xl font-black text-slate-900 uppercase mb-4">Features:</h3>
+                  {product.description && (
+                    <div 
+                      className="text-gray-700 leading-relaxed prose prose-sm max-w-none"
+                      dangerouslySetInnerHTML={{ __html: product.description }}
+                    />
+                  )}
+                </div>
               </div>
             </div>
           </div>
