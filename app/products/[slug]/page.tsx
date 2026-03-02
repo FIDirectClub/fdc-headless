@@ -10,11 +10,19 @@ export async function generateStaticParams() {
   }));
 }
 
-export default async function ProductPage({ params }: { params: { slug: string } }) {
+interface ProductPageProps {
+  params: Promise<{ slug: string }>;
+}
+
+export default async function ProductPage({ params }: ProductPageProps) {
+  // Await params in Next.js 15
+  const { slug } = await params;
+  
   // Fetch the actual product by slug
-  const product = await getProductBySlug(params.slug);
+  const product = await getProductBySlug(slug);
 
   if (!product) {
+    console.error(`Product not found for slug: ${slug}`);
     notFound();
   }
 
