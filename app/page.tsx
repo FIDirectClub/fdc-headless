@@ -1,16 +1,24 @@
 import Navigation from "@/components/Navigation";
+import ProductCard from "@/components/ProductCard";
 import Link from "next/link";
 import Image from "next/image";
+import { getProducts } from "@/lib/woocommerce";
 
 export default async function Home() {
+  // Fetch real products from WooCommerce
+  const featuredProducts = await getProducts({
+    per_page: 12,
+    orderby: "date",
+    order: "desc",
+  });
+
   return (
     <>
       <Navigation />
       
       <main className="pt-20 bg-white">
-        {/* Hero Banner - Large lifestyle image with CTA */}
+        {/* Hero Banner */}
         <section className="relative h-[600px] bg-gradient-to-br from-slate-700 via-slate-600 to-slate-500 overflow-hidden">
-          {/* Placeholder for hero image */}
           <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1595590424283-b8f17842773f?w=1920')] bg-cover bg-center opacity-40"></div>
           
           <div className="relative h-full max-w-7xl mx-auto px-6 md:px-12 flex items-center">
@@ -122,7 +130,7 @@ export default async function Home() {
           </div>
         </section>
 
-        {/* Featured Products with Badges */}
+        {/* Featured Products with Real Data */}
         <section className="py-12 bg-white">
           <div className="max-w-7xl mx-auto px-6 md:px-12">
             <h2 className="text-3xl font-black text-slate-900 uppercase mb-8 tracking-tight">
@@ -130,70 +138,8 @@ export default async function Home() {
             </h2>
             
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-              {/* Sample products with full badge system */}
-              {[
-                { title: 'PSA AR-15 Rifle Kit 5.56 16" Nitride 1:7 Mid-Length 13.5" M-Lok MOE w/ MBUS', brand: 'PSA', price: '449.99', msrp: '649.99', badges: ['daily-deal', 'free-ship'], sku: '516446780' },
-                { title: 'Springfield Armory XD-M Elite 9mm 4.5" OSP Optics Ready 19+1', brand: 'Springfield', price: '549.99', msrp: '699.99', badges: ['clearance'], sku: 'XDMED9459' },
-                { title: 'Glock 19 Gen5 9mm 4.02" Fixed Sights 15rd Black', brand: 'Glock', price: '499.99', msrp: '599.99', badges: ['daily-deal'], sku: 'G19G5' },
-                { title: 'Sig Sauer P320 Compact 9mm 3.9" X-Ray Sights 15rd Black', brand: 'Sig Sauer', price: '529.99', msrp: '679.99', badges: ['free-ship'], sku: '320C-9-B' },
-                { title: 'Smith & Wesson M&P 15 Sport III 5.56 16" M-LOK 30rd Black', brand: 'S&W', price: '699.99', msrp: '899.99', badges: ['daily-deal', 'free-ship'], sku: '12936' },
-                { title: 'Mossberg 590 Shockwave 12ga 14" Raptor Grip 6rd Black', brand: 'Mossberg', price: '399.99', msrp: '549.99', badges: ['clearance'], sku: '50659' },
-                { title: 'PSAK-47 GF3 Forged Classic Polymer Rifle 7.62x39 16.5" 30rd', brand: 'PSA', price: '649.99', msrp: '899.99', badges: ['daily-deal'], sku: '51655115846' },
-                { title: 'Vortex Optics Crossfire Red Dot 2 MOA with Riser Mount', brand: 'Vortex', price: '129.99', msrp: '189.99', badges: ['free-ship'], sku: 'CF-RD2' },
-              ].map((product, i) => (
-                <Link
-                  key={i}
-                  href={`/products/${product.sku.toLowerCase()}`}
-                  className="group bg-white border-2 border-gray-200 hover:border-slate-800 rounded-lg overflow-hidden transition-all"
-                >
-                  {/* Product Image */}
-                  <div className="relative aspect-square bg-gray-100 overflow-hidden">
-                    <div className="absolute inset-0 bg-gray-200 group-hover:bg-gray-300 transition-colors"></div>
-                    
-                    {/* Multi-Badge System */}
-                    <div className="absolute top-2 left-2 right-2 flex flex-wrap gap-1">
-                      {product.badges.includes('daily-deal') && (
-                        <span className="px-2 py-1 bg-slate-800 text-white text-xs font-bold uppercase rounded shadow-sm">
-                          Daily Deal
-                        </span>
-                      )}
-                      {product.badges.includes('free-ship') && (
-                        <span className="px-2 py-1 bg-blue-600 text-white text-xs font-bold uppercase rounded shadow-sm">
-                          Free Ship
-                        </span>
-                      )}
-                      {product.badges.includes('clearance') && (
-                        <span className="px-2 py-1 bg-green-600 text-white text-xs font-bold uppercase rounded shadow-sm">
-                          Clearance
-                        </span>
-                      )}
-                    </div>
-                  </div>
-                  
-                  {/* Product Info */}
-                  <div className="p-3">
-                    <div className="text-xs text-gray-500 uppercase font-bold mb-1">
-                      {product.brand}
-                    </div>
-                    <h3 className="text-sm font-bold text-slate-900 mb-2 line-clamp-2 leading-tight">
-                      {product.title}
-                    </h3>
-                    
-                    <div className="mb-2">
-                      <div className="flex items-baseline gap-2">
-                        <span className="text-xl font-black text-red-600">${product.price}</span>
-                        <span className="text-xs text-gray-400 line-through">${product.msrp}</span>
-                      </div>
-                      <div className="text-xs text-gray-500 mt-1">
-                        SKU: {product.sku}
-                      </div>
-                    </div>
-                    
-                    <div className="text-xs text-emerald-600 font-bold">
-                      ✓ In Stock
-                    </div>
-                  </div>
-                </Link>
+              {featuredProducts.map((product) => (
+                <ProductCard key={product.id} product={product} />
               ))}
             </div>
 
@@ -246,7 +192,6 @@ export default async function Home() {
         <section className="py-12 bg-white">
           <div className="max-w-7xl mx-auto px-6 md:px-12">
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {/* Large Feature - Suppressors */}
               <Link href="/products?category=suppressors" className="group relative md:col-span-2 lg:row-span-2 h-[400px] lg:h-full bg-gradient-to-br from-slate-800 to-slate-900 rounded-lg overflow-hidden shadow-lg">
                 <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1595590424283-b8f17842773f?w=800')] bg-cover bg-center opacity-30"></div>
                 <div className="relative h-full p-8 flex flex-col justify-end">
@@ -258,7 +203,6 @@ export default async function Home() {
                 </div>
               </Link>
 
-              {/* AR-15 Deals */}
               <Link href="/products?category=ar-15" className="group relative h-[200px] bg-gradient-to-br from-amber-600 to-amber-700 rounded-lg overflow-hidden shadow-lg">
                 <div className="relative h-full p-6 flex flex-col justify-end">
                   <h3 className="text-2xl font-black text-white uppercase mb-2">AR-15 Parts</h3>
@@ -269,7 +213,6 @@ export default async function Home() {
                 </div>
               </Link>
 
-              {/* Ammo Deals */}
               <Link href="/products?category=ammunition" className="group relative h-[200px] bg-gradient-to-br from-red-700 to-red-800 rounded-lg overflow-hidden shadow-lg">
                 <div className="relative h-full p-6 flex flex-col justify-end">
                   <h3 className="text-2xl font-black text-white uppercase mb-2">Ammunition</h3>
@@ -280,7 +223,6 @@ export default async function Home() {
                 </div>
               </Link>
 
-              {/* Optics */}
               <Link href="/products?category=optics" className="group relative h-[200px] bg-gradient-to-br from-blue-700 to-blue-800 rounded-lg overflow-hidden shadow-lg">
                 <div className="relative h-full p-6 flex flex-col justify-end">
                   <h3 className="text-2xl font-black text-white uppercase mb-2">Optics</h3>
@@ -291,7 +233,6 @@ export default async function Home() {
                 </div>
               </Link>
 
-              {/* Daily Deals */}
               <Link href="/deals" className="group relative h-[200px] bg-gradient-to-br from-yellow-500 to-yellow-600 rounded-lg overflow-hidden shadow-lg">
                 <div className="relative h-full p-6 flex flex-col justify-end">
                   <div className="text-4xl mb-2">🔥</div>

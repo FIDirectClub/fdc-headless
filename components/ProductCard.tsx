@@ -9,77 +9,107 @@ interface ProductCardProps {
 export default function ProductCard({ product }: ProductCardProps) {
   const imageUrl = product.images[0]?.src || "/placeholder-product.jpg";
   const price = parseFloat(product.price);
-  const regularPrice = parseFloat(product.regular_price);
+  const regularPrice = parseFloat(product.regular_price || product.price);
   const onSale = product.on_sale && regularPrice > price;
+  const savings = onSale ? regularPrice - price : 0;
+  const savingsPercent = onSale ? Math.round((savings / regularPrice) * 100) : 0;
 
   return (
     <Link
       href={`/products/${product.slug}`}
-      className="group block bg-white/5 backdrop-blur-sm rounded-lg overflow-hidden border-2 border-white/10 hover:border-gold transition-all duration-300 hover:shadow-[0_0_30px_rgba(255,45,85,0.3)] no-underline"
+      className="group bg-white border-2 border-gray-200 hover:border-slate-800 rounded-lg overflow-hidden transition-all"
     >
-      {/* Image Container */}
-      <div className="relative aspect-square overflow-hidden bg-white/10">
+      {/* Product Image */}
+      <div className="relative aspect-square bg-gray-100 overflow-hidden">
         <Image
           src={imageUrl}
           alt={product.name}
           fill
-          className="object-cover group-hover:scale-105 transition-transform duration-300"
-          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+          className="object-contain p-4 group-hover:scale-105 transition-transform duration-300"
+          sizes="(max-width: 768px) 50vw, (max-width: 1200px) 33vw, 25vw"
         />
-        {onSale && (
-          <div className="absolute top-2 right-2 bg-gold text-white px-3 py-1 rounded-full font-barlow-condensed font-bold text-sm uppercase">
-            Sale
-          </div>
-        )}
+        
+        {/* Multi-Badge System */}
+        <div className="absolute top-2 left-2 right-2 flex flex-wrap gap-1">
+          {onSale && (
+            <span className="px-2 py-1 bg-slate-800 text-white text-xs font-bold uppercase rounded shadow-sm">
+              Daily Deal
+            </span>
+          )}
+          {onSale && savingsPercent >= 20 && (
+            <span className="px-2 py-1 bg-green-600 text-white text-xs font-bold uppercase rounded shadow-sm">
+              Clearance
+            </span>
+          )}
+          {product.meta_data?.some((meta) => meta.key === 'free_shipping' && meta.value === 'yes') && (
+            <span className="px-2 py-1 bg-blue-600 text-white text-xs font-bold uppercase rounded shadow-sm">
+              Free Ship
+            </span>
+          )}
+        </div>
+
         {product.stock_status === "outofstock" && (
           <div className="absolute inset-0 bg-black/60 flex items-center justify-center">
-            <span className="text-white font-barlow-condensed font-bold text-xl uppercase">
+            <span className="text-white font-bold text-lg uppercase">
               Out of Stock
             </span>
           </div>
         )}
       </div>
-
+      
       {/* Product Info */}
-      <div className="p-4">
-        <h3 className="text-white font-barlow-condensed font-semibold text-lg mb-2 line-clamp-2 group-hover:text-gold transition-colors">
+      <div className="p-3">
+        {/* Brand (from categories or first category) */}
+        {product.categories && product.categories[0] && (
+          <div className="text-xs text-gray-500 uppercase font-bold mb-1">
+            {product.categories[0].name}
+          </div>
+        )}
+
+        {/* Product Title */}
+        <h3 className="text-sm font-bold text-slate-900 mb-2 line-clamp-2 leading-tight group-hover:text-blue-600 transition-colors">
           {product.name}
         </h3>
-
-        {/* Price */}
-        <div className="flex items-center gap-2 mb-2">
-          {onSale && (
-            <span className="text-steel line-through text-sm">
-              ${regularPrice.toFixed(2)}
-            </span>
+        
+        {/* Price Display */}
+        <div className="mb-2">
+          {onSale ? (
+            <div>
+              <div className="flex items-baseline gap-2 mb-1">
+                <span className="text-xl font-black text-red-600">${price.toFixed(2)}</span>
+                <span className="text-xs text-gray-400 line-through">${regularPrice.toFixed(2)}</span>
+              </div>
+              <div className="text-xs text-emerald-600 font-semibold">
+                Save ${savings.toFixed(2)} ({savingsPercent}%)
+              </div>
+            </div>
+          ) : (
+            <span className="text-xl font-black text-slate-900">${price.toFixed(2)}</span>
           )}
-          <span className="text-gold font-bold text-xl">
-            ${price.toFixed(2)}
-          </span>
         </div>
 
         {/* SKU */}
         {product.sku && (
-          <p className="text-steel-light text-xs font-barlow-condensed uppercase tracking-wide">
+          <div className="text-xs text-gray-500 mb-2">
             SKU: {product.sku}
-          </p>
+          </div>
         )}
-
+        
         {/* Stock Status */}
         {product.stock_status === "instock" && (
-          <div className="mt-3 flex items-center gap-1 text-green-500 text-sm">
-            <svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+          <div className="flex items-center gap-1 text-emerald-600 text-xs font-bold">
+            <svg width="12" height="12" fill="currentColor" viewBox="0 0 16 16">
               <circle cx="8" cy="8" r="8" />
             </svg>
-            <span className="font-barlow-condensed font-medium">In Stock</span>
+            <span>In Stock</span>
           </div>
         )}
         {product.stock_status === "onbackorder" && (
-          <div className="mt-3 flex items-center gap-1 text-yellow-500 text-sm">
-            <svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+          <div className="flex items-center gap-1 text-yellow-600 text-xs font-bold">
+            <svg width="12" height="12" fill="currentColor" viewBox="0 0 16 16">
               <circle cx="8" cy="8" r="8" />
             </svg>
-            <span className="font-barlow-condensed font-medium">Backorder</span>
+            <span>Backorder</span>
           </div>
         )}
       </div>
