@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { useState } from "react";
 
 export default function Navigation() {
@@ -31,17 +32,16 @@ export default function Navigation() {
         <div className="max-w-7xl mx-auto px-6 md:px-12 py-4">
           <div className="flex items-center justify-between gap-6">
             {/* Logo */}
-            <Link href="/" className="flex items-center gap-2">
-              <div className="w-12 h-12 bg-slate-900 rounded-full flex items-center justify-center">
-                <span className="text-white font-black text-xl">FDC</span>
-              </div>
-              <div className="hidden md:flex flex-col">
-                <span className="text-slate-900 font-black text-lg leading-none">
-                  FIREARMS
-                </span>
-                <span className="text-gray-500 text-xs font-bold uppercase tracking-wider">
-                  Direct Club
-                </span>
+            <Link href="/" className="flex items-center">
+              <div className="relative w-48 h-12">
+                <Image
+                  src="/fdc-logo.png"
+                  alt="Firearms Direct Club"
+                  fill
+                  className="object-contain"
+                  style={{ filter: 'invert(1)' }}
+                  priority
+                />
               </div>
             </Link>
 
