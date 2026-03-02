@@ -36,7 +36,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
     <>
       <Navigation />
       
-      <main className="pt-40 bg-white min-h-screen">
+      <main className="pt-20 bg-white min-h-screen">
         {/* Breadcrumbs */}
         <div className="bg-gray-100 py-3 border-b border-gray-200">
           <div className="max-w-7xl mx-auto px-6 md:px-12">
@@ -121,7 +121,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
             {/* RIGHT COLUMN - Product Info */}
             <div>
               {/* Product Title */}
-              <h1 className="text-3xl md:text-4xl font-black text-slate-900 mb-6 leading-tight mt-8">
+              <h1 className="text-3xl md:text-4xl font-black text-slate-900 mb-6 leading-tight mt-16">
                 {product.name}
               </h1>
 
