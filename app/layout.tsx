@@ -22,7 +22,7 @@ const bangers = Bangers({
 
 export const metadata: Metadata = {
   title: "Firearms Direct Club — Wholesale Firearms at Dealer Prices",
-  description: "The ultimate wholesale firearms marketplace. Buy firearms at dealer cost. FFL-compliant, ATF-approved.",
+  description: "Buy firearms, optics, and accessories at true dealer cost. FFL-compliant wholesale marketplace with 37,000+ products.",
 };
 
 export default function RootLayout({
@@ -33,7 +33,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${barlow.variable} ${barlowCondensed.variable} ${bangers.variable} font-barlow antialiased bg-gradient-to-br from-black via-dark to-[#bdb8af] text-white min-h-screen`}
+        className={`${barlow.variable} ${barlowCondensed.variable} ${bangers.variable} font-barlow antialiased bg-zinc-950 text-zinc-100 min-h-screen`}
       >
         {children}
       </body>
